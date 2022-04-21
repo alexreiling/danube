@@ -18,15 +18,16 @@ const Intro: React.FC<Props> = (props) => {
       </div>
       <ul>
         <li>
-          Für jede Frage kannst du maximal <b>{POINTS_PER_QUESTION} Punkte</b>{" "}
-          gewinnen.
+          {"Für jede Frage kannst du maximal "}
+          <b>{POINTS_PER_QUESTION} Punkte</b>
+          {" erhalten."}
         </li>
         <li>Mehrere richtige Antworten sind möglich (Multiple-Choice)</li>
         <li>Für jede fehlende richtige Antwort gibt es einen Punkt Abzug</li>
         <li>Für jede falsche Antwort gibt es ebenfalls einen Punkt Abzug</li>
       </ul>
       <h2>Viel Erfolg! :)</h2>
-      <StartButton onClick={onCompleted}>Los geht's!</StartButton>
+      <StartButton onClick={onCompleted}>{"Los geht's!"}</StartButton>
     </Wrapper>
   );
 };
