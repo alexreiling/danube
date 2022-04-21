@@ -49,6 +49,7 @@ const Quiz: React.FC<Props> = (props) => {
       <div id="options">
         {options.map((option, index) => (
           <div
+            key={index}
             onClick={() => {
               const merged = new Set(selected);
               if (merged.has(index)) merged.delete(index);
