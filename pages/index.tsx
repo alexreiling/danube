@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import styled from "styled-components";
 import Counter from "../components/Counter";
+import { COLORS } from "../theme";
 
 const Home: NextPage = () => {
   return (
@@ -21,6 +22,6 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  color: #02d1ff;
-  background-color: #0f192d;
+  color: ${COLORS.font};
+  background-color: ${COLORS.background};
 `;
