@@ -1,24 +1,33 @@
-import { HTMLAttributes, useCallback, useEffect, useState } from "react";
-import styled from "styled-components";
-import { Quiz, QUIZ_DATA } from "./data";
+import { HTMLAttributes, useState } from "react";
+import styled, { css, keyframes } from "styled-components";
+import { POINTS_PER_QUESTION, QUIZ } from "./data";
 
 import clsx from "clsx";
+import { COLORS } from "../../theme";
+import { ButtonStyles } from "../../styles/buttonStyles";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {}
+interface Props extends HTMLAttributes<HTMLDivElement> {
+  onComplete: (score: number) => any;
+}
 
 const Quiz: React.FC<Props> = (props) => {
-  const { ...rest } = props;
-  const [validated, setValidated] = useState(false);
-  const [quiz, setQuiz] = useState<Quiz>(QUIZ_DATA);
+  const { onComplete, ...rest } = props;
+  const [phase, setPhase] = useState<"prompting" | "validation">("prompting");
+
   const [step, setStep] = useState(0);
   const [score, setScore] = useState(0);
+  const [points, setPoints] = useState<number | undefined>(undefined);
   const [selected, setSelected] = useState<number[]>([]);
-  const [wrong, setWrong] = useState<number[]>();
-  const [missing, setMissing] = useState<number[]>();
+  const [wrong, setWrong] = useState<number[]>([]);
+  const [missing, setMissing] = useState<number[]>([]);
 
-  const { options, question, valid } = quiz.questions[step];
+  const { options, question, valid } = QUIZ[step];
 
   const validate = () => {
+    if (selected.length < 1) {
+      alert("Du musst mindestens 1 Antwort auswählen um fortfahren zu können.");
+      return;
+    }
     const wrongAnswers: number[] = [];
     selected.forEach((index) => {
       if (!valid.includes(index)) wrongAnswers.push(index);
@@ -30,47 +39,70 @@ const Quiz: React.FC<Props> = (props) => {
     setWrong(wrongAnswers);
     setMissing(missingAnswers);
 
-    const addScore = 5 - wrongAnswers.length - missingAnswers.length;
-
-    setScore(score + addScore);
-    setValidated(true);
+    const points =
+      POINTS_PER_QUESTION - wrongAnswers.length - missingAnswers.length;
+    setPoints(points);
+    setPhase("validation");
   };
+  const finished = step + 1 >= QUIZ.length;
   const nextStep = () => {
-    if (step + 1 >= quiz.questions.length) return;
-    setValidated(false);
+    if (finished) return;
+    setPhase("prompting");
     setWrong([]);
     setMissing([]);
     setSelected([]);
     setStep(step + 1);
+    setScore(score + (points || 0));
+    setPoints(undefined);
+  };
+  const toggleOption = (index: number) => {
+    if (phase === "validation") return;
+    const merged = new Set(selected);
+    if (merged.has(index)) merged.delete(index);
+    else merged.add(index);
+    setSelected(Array.from(merged.values()));
   };
   return (
-    <Wrapper {...rest} className={clsx({ validated })}>
-      <div id="question">{question}</div>
-      <div id="options">
+    <Wrapper {...rest}>
+      <h2 id="question">{`${question} (${step + 1}/${QUIZ.length})`}</h2>
+      <OptionsGrid>
         {options.map((option, index) => (
-          <div
+          <Option
             key={index}
-            onClick={() => {
-              const merged = new Set(selected);
-              if (merged.has(index)) merged.delete(index);
-              else merged.add(index);
-              setSelected(Array.from(merged.values()));
-            }}
+            onClick={() => toggleOption(index)}
             className={clsx({
               option,
+              validated: phase === "validation",
               selected: selected.includes(index),
               correct: valid.includes(index),
-
-              missing: missing?.includes(index),
-              wrong: wrong?.includes(index),
+              missing: missing.includes(index),
+              wrong: wrong.includes(index),
             })}
-          >{`[${index + 1}]: ${option}`}</div>
+          >{`${option}`}</Option>
         ))}
-      </div>
-      <div id="submit" onClick={validated ? nextStep : validate}>
-        {validated ? "Nächste Runde" : "Auflösen"}
-      </div>
-      <div id="score">{score}</div>
+      </OptionsGrid>
+
+      <Footer>
+        <div id="score">{`Gesamt: ${score}`}</div>
+        {points && <Points id="points">+{points} </Points>}
+        <Submit
+          id="submit"
+          className={clsx({ hidden: selected.length < 1 })}
+          onClick={
+            phase === "prompting"
+              ? validate
+              : finished
+              ? () => onComplete(score)
+              : nextStep
+          }
+        >
+          {phase === "prompting"
+            ? "Auflösen"
+            : finished
+            ? "Quiz beenden"
+            : "Nächste Frage"}
+        </Submit>
+      </Footer>
     </Wrapper>
   );
 };
@@ -78,22 +110,69 @@ const Quiz: React.FC<Props> = (props) => {
 export default Quiz;
 
 const Wrapper = styled.div`
-  .option {
-    &.selected {
-      background-color: blue;
-    }
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const OptionsGrid = styled.div`
+  display: grid;
+  grid-gap: 12px;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 550px) {
+    grid-template-columns: 1fr 1fr;
+  }
+`;
+
+const Option = styled.div`
+  ${ButtonStyles}
+  &.selected {
+    background-color: ${COLORS.font};
+    color: ${COLORS.background};
   }
   &.validated {
-    .option {
-      &.correct.selected {
-        background-color: green;
-      }
-      &.selected.wrong {
-        background-color: red;
-      }
-      &.missing {
-        background-color: yellow;
-      }
+    cursor: default;
+    &.selected.correct {
+      background-color: green;
+      border-color: green;
+    }
+    &.selected.wrong {
+      background-color: red;
+      border-color: red;
+    }
+    &.missing {
+      background-color: lightgreen;
+      border-color: red;
+      color: ${COLORS.background};
     }
   }
+`;
+
+const Footer = styled.div`
+  margin-top: 24px;
+  border-top: 1px dashed ${COLORS.font};
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Submit = styled.div`
+  ${ButtonStyles}
+  opacity:1;
+
+  &.hidden {
+    opacity: 0;
+  }
+`;
+const pulsate = keyframes`  
+  0% {transform: scale(1);}
+  50% {
+    transform: scale(1.2);
+  }
+`;
+const Points = styled.div`
+  font-size: 2em;
+  animation: ${pulsate} 1s ease-out infinite;
 `;

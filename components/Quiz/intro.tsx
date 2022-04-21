@@ -1,6 +1,7 @@
 import { HTMLAttributes } from "react";
 import styled from "styled-components";
 import { COLORS } from "../../theme";
+import { POINTS_PER_QUESTION } from "./data";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   onCompleted: () => any;
@@ -17,7 +18,8 @@ const Intro: React.FC<Props> = (props) => {
       </div>
       <ul>
         <li>
-          Für jede Frage kannst du maximal <b>5 Punkte</b> gewinnen.
+          Für jede Frage kannst du maximal <b>{POINTS_PER_QUESTION} Punkte</b>{" "}
+          gewinnen.
         </li>
         <li>Mehrere richtige Antworten sind möglich (Multiple-Choice)</li>
         <li>Für jede fehlende richtige Antwort gibt es einen Punkt Abzug</li>

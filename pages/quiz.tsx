@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import Quiz from "../components/Quiz";
 import Intro from "../components/Quiz/intro";
+import Outro from "../components/Quiz/outro";
 import { COLORS } from "../theme";
 
 const Wrapper = styled.div`
@@ -9,7 +10,7 @@ const Wrapper = styled.div`
   width: 100vw;
   color: ${COLORS.font};
   background-color: ${COLORS.background};
-  padding: 2vw;
+  padding: 4vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,14 +21,20 @@ const Wrapper = styled.div`
 
 export default function QuizPage() {
   const [phase, setPhase] = useState<"intro" | "quiz" | "outro">("intro");
+  const [score, setScore] = useState(0);
   return (
     <Wrapper>
       {phase === "intro" ? (
         <Intro onCompleted={() => setPhase("quiz")} />
       ) : phase === "quiz" ? (
-        <Quiz />
+        <Quiz
+          onComplete={(score) => {
+            setPhase("outro");
+            setScore(score);
+          }}
+        />
       ) : (
-        <Quiz />
+        <Outro score={score} />
       )}
     </Wrapper>
   );
