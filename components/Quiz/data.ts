@@ -12,7 +12,7 @@ export const QUIZ: Quiz = [
   },
   {
     question: "Wofür wird das meiste Plastik gebraucht?",
-    options: ["Bausektor/ Baustellen", "Verpackungen", "Textilien/Kleidung"],
+    options: ["Bausektor/Baustellen", "Verpackungen", "Textilien/Kleidung"],
     valid: [1],
   },
   {
