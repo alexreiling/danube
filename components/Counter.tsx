@@ -6,23 +6,13 @@ import {
   useState,
 } from "react";
 import styled from "styled-components";
-import useInterval from "./useInterval";
-import CountUp from "react-countup";
-import { start } from "repl";
-const prompt = (since: string, value: number) =>
-  `Seit ${since} wurden schon ${value}kg Plastik in unsere Meere gespült`;
 
 interface Props extends HTMLAttributes<HTMLDivElement> {}
-interface State {
-  startTime: number;
-  currentTime: number;
-  ratePerMinute: number;
-  value: number;
-}
+
 const Counter: React.FC<Props> = (props) => {
   const { ...rest } = props;
   const afRef = useRef<number | undefined>();
-  const [value, setValue] = useState(1000);
+  const [value, setValue] = useState(0);
   const [startTime, setStartTime] = useState(new Date());
   const [ratePerMinute, setRatePerMinute] = useState(15000);
   const [optionsOpen, setOptionsOpen] = useState(false);
@@ -35,7 +25,7 @@ const Counter: React.FC<Props> = (props) => {
 
   useEffect(() => {
     const newTime = new Date();
-    newTime.setHours(8);
+    newTime.setHours(0);
     newTime.setMinutes(0);
     setStartTime(newTime);
   }, []);
@@ -50,12 +40,7 @@ const Counter: React.FC<Props> = (props) => {
       <div id="value-wrapper">
         {value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}kg
       </div>
-      <div id="subline">
-        {`wurden bereits seit heute ${startTime.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        })} Uhr in unsere Meere gespült.`}
-      </div>
+      <div id="subline">{`wurden heute bereits in unsere Meere gespült.`}</div>
       <div id="options-wrapper">
         <div id="options-toggle" onClick={() => setOptionsOpen(!optionsOpen)}>
           Optionen
@@ -109,12 +94,13 @@ const Wrapper = styled.div`
   width: 100%;
   padding: 5vw;
   #value-wrapper {
-    display: inline-block;
-    font-size: 10vmin;
+    font-size: 12vw;
     font-family: monospace;
+    text-align: center;
   }
   #subline {
-    font-size: 3vmin;
+    font-size: 4vw;
+    text-align: center;
   }
   #options-wrapper {
     color: white;
