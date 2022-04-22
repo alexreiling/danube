@@ -17,13 +17,17 @@ export const QUIZ: Quiz = [
   },
   {
     question: "Wie viel Plastik wird pro Jahr produziert?",
-    options: ["900.000.000 Tonnen", "200.000.000 Tonnen", "400.000.000 Tonnen"],
-    valid: [0, 1],
+    options: [
+      "900 Millionen Tonnen",
+      "200 Millionen Tonnen",
+      "400 Millionen Tonnen",
+    ],
+    valid: [2],
   },
   {
     question: "Wie viel Plastik wird wirklich recycelt?",
     options: ["9%", "12%", "21%"],
-    valid: [1],
+    valid: [0],
   },
   {
     question: "Wie gelangt Mikroplastik in Gewässer?",
@@ -50,17 +54,12 @@ export const QUIZ: Quiz = [
   },
   {
     question: "Wie kommt Mikroplastik in unseren Körper?",
-    options: [
-      "Durch Lebensmittel/ Nahrung/ Essen",
-      "Durch Kosmetikprodukte",
-      "Durch die Luft",
-    ],
+    options: ["Durch Lebensmittel", "Durch Kosmetikprodukte", "Durch die Luft"],
     valid: [0, 2],
   },
   {
-    question:
-      "Was bedingt die Freigabe von Treibhausgasen von Mikroplastik im Meer? Was führt dazu, dass Mikroplastik Treibhausgase produziert? ",
-    options: ["Wellen / Strömung", "Sonnenstrahlen/ UV-Licht", "Salzwasser"],
+    question: "Was führt dazu, dass Mikroplastik Treibhausgase produziert? ",
+    options: ["Wellen/Strömung", "Sonnenstrahlen/UV-Licht", "Salzwasser"],
     valid: [1, 2],
   },
 ];
