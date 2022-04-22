@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Quiz from "../components/Quiz";
+import Free from "../components/Quiz/Free";
 import Intro from "../components/Quiz/intro";
 import Outro from "../components/Quiz/outro";
 import { COLORS } from "../theme";
@@ -20,7 +21,9 @@ const Wrapper = styled.div`
 `;
 
 export default function QuizPage() {
-  const [phase, setPhase] = useState<"intro" | "quiz" | "outro">("intro");
+  const [phase, setPhase] = useState<"intro" | "quiz" | "free" | "outro">(
+    "intro"
+  );
   const [score, setScore] = useState(0);
   return (
     <Wrapper>
@@ -28,11 +31,19 @@ export default function QuizPage() {
         <Intro onCompleted={() => setPhase("quiz")} />
       ) : phase === "quiz" ? (
         <Quiz
-          onComplete={(score) => {
-            setPhase("outro");
-            setScore(score);
+          onComplete={(points) => {
+            setPhase("free");
+            setScore(score + points);
           }}
         />
+      ) : phase === "free" ? (
+        <Free
+          score={score}
+          onComplete={(points) => {
+            setScore(score + points);
+            setPhase("outro");
+          }}
+        ></Free>
       ) : (
         <Outro score={score} />
       )}

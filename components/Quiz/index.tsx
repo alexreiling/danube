@@ -5,6 +5,8 @@ import { POINTS_PER_QUESTION, QUIZ } from "./data";
 import clsx from "clsx";
 import { COLORS } from "../../theme";
 import { ButtonStyles } from "../../styles/buttonStyles";
+import { Footer } from "./Footer";
+import { Points } from "./Points";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   onComplete: (score: number) => any;
@@ -13,7 +15,6 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 const Quiz: React.FC<Props> = (props) => {
   const { onComplete, ...rest } = props;
   const [phase, setPhase] = useState<"prompting" | "validation">("prompting");
-
   const [step, setStep] = useState(0);
   const [score, setScore] = useState(0);
   const [points, setPoints] = useState<number | undefined>(undefined);
@@ -92,15 +93,11 @@ const Quiz: React.FC<Props> = (props) => {
             phase === "prompting"
               ? validate
               : finished
-              ? () => onComplete(score)
+              ? () => onComplete(score + (points || 0))
               : nextStep
           }
         >
-          {phase === "prompting"
-            ? "Auflösen"
-            : finished
-            ? "Quiz beenden"
-            : "Nächste Frage"}
+          {phase === "prompting" ? "Auflösen" : "Nächste Frage"}
         </Submit>
       </Footer>
     </Wrapper>
@@ -149,15 +146,6 @@ const Option = styled.div`
   }
 `;
 
-const Footer = styled.div`
-  margin-top: 24px;
-  border-top: 1px dashed ${COLORS.font};
-  padding-top: 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
 const Submit = styled.div`
   ${ButtonStyles}
   opacity:1;
@@ -165,14 +153,4 @@ const Submit = styled.div`
   &.hidden {
     opacity: 0;
   }
-`;
-const pulsate = keyframes`  
-  0% {transform: scale(1);}
-  50% {
-    transform: scale(1.2);
-  }
-`;
-const Points = styled.div`
-  font-size: 2em;
-  animation: ${pulsate} 1s ease-out infinite;
 `;

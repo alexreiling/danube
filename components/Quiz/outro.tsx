@@ -18,7 +18,7 @@ const Outro: React.FC<Props> = (props) => {
       <div>
         {"Du hast "}
         <b>
-          {score} von {POINTS_PER_QUESTION * QUIZ.length}
+          {score} von {POINTS_PER_QUESTION * QUIZ.length + 4}
         </b>
         {" Punkten beim Quiz erzielt."}
       </div>
