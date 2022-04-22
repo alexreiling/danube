@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { HTMLAttributes } from "react";
 import styled, { keyframes } from "styled-components";
 import { ButtonStyles } from "../../styles/buttonStyles";
-import { POINTS_PER_QUESTION, QUIZ } from "./data";
+import { NUM_FREE_ANSWERS, POINTS_PER_QUESTION, QUIZ } from "./data";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   score: number;
@@ -18,7 +18,7 @@ const Outro: React.FC<Props> = (props) => {
       <div>
         {"Du hast "}
         <b>
-          {score} von {POINTS_PER_QUESTION * QUIZ.length + 4}
+          {score} von {POINTS_PER_QUESTION * QUIZ.length + NUM_FREE_ANSWERS}
         </b>
         {" Punkten beim Quiz erzielt."}
       </div>

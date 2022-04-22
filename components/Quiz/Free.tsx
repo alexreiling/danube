@@ -5,6 +5,7 @@ import { Points } from "./Points";
 import { ButtonStyles } from "../../styles/buttonStyles";
 import { COLORS } from "../../theme";
 import { Footer } from "./Footer";
+import { NUM_FREE_ANSWERS } from "./data";
 
 export const RESULTS_KEY = "quiz_results";
 
@@ -15,7 +16,9 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 const Free: React.FC<Props> = (props) => {
   const { score, onComplete, ...rest } = props;
-  const [answers, setAnswers] = useState<string[]>(Array(4).fill(""));
+  const [answers, setAnswers] = useState<string[]>(
+    Array(NUM_FREE_ANSWERS).fill("")
+  );
   const handleChange = (index: number, value: string) => {
     const update = answers.map((old, i) => (i === index ? value : old));
     setAnswers(update);
@@ -41,8 +44,8 @@ const Free: React.FC<Props> = (props) => {
     <Wrapper {...rest}>
       <h2>Was hilft am besten gegen Mikroplastik?</h2>
       <p>
-        Überlegt euch bis zu 5 Möglichkeiten die dabei helfen, dass nicht so
-        viel Plastik in der Natur landet:
+        {`Überlegt euch bis zu ${NUM_FREE_ANSWERS} Möglichkeiten die dabei helfen, dass nicht so
+        viel Plastik in der Natur landet:`}
       </p>
       <Form>
         {answers.map((answer, index) => (

@@ -4,6 +4,7 @@ export type Quiz = {
   valid: number[];
 }[];
 export const POINTS_PER_QUESTION = 4;
+export const NUM_FREE_ANSWERS = 4;
 export const QUIZ: Quiz = [
   {
     question:

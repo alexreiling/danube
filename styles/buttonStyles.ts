@@ -7,4 +7,8 @@ export const ButtonStyles = css`
   padding: 8px 16px;
   cursor: pointer;
   transition: all 0.3s ease-out;
+  &:active {
+    background-color: ${COLORS.font};
+    color: ${COLORS.background};
+  }
 `;
