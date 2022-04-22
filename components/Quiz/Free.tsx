@@ -47,6 +47,7 @@ const Free: React.FC<Props> = (props) => {
       <Form>
         {answers.map((answer, index) => (
           <Input
+            key={index}
             value={answer || ""}
             placeholder={`${index + 1}.`}
             onChange={(e) => handleChange(index, e.currentTarget.value)}

@@ -18,7 +18,7 @@ const Wrapper = styled.div`
   }
 `;
 
-export default function results() {
+export default function ResultsPage() {
   const [data, setData] = useState<string[]>();
   useEffect(() => {
     try {
@@ -32,8 +32,8 @@ export default function results() {
   return (
     <Wrapper>
       <h1>Ergebnisse der freien Quizaufgabe</h1>
-      {data?.map((word) => (
-        <div>{word}</div>
+      {data?.map((word, index) => (
+        <div key={index}>{word}</div>
       ))}
     </Wrapper>
   );
