@@ -6,7 +6,8 @@ export type Quiz = {
 export const POINTS_PER_QUESTION = 4;
 export const QUIZ: Quiz = [
   {
-    question: "Wo ist die Belastung durch Plastik am größten?",
+    question:
+      "In welchen beiden Regionen ist die Belastung durch Plastik am größten?",
     options: ["Meer", "Böden", "Binnengewässern"],
     valid: [1, 2],
   },
